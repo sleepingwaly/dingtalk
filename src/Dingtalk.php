@@ -13,7 +13,8 @@ class Dingtalk
         'agentId'=>'',
         'corpId'=>'',
         'corpSecret'=>'',
-        'ssoSecret'=>''
+        'ssoSecret'=>'',
+        'apiHost'=>'https://oapi.dingtalk.com'
     ];
 
     protected static $error = null;
@@ -25,7 +26,7 @@ class Dingtalk
     public static function getInstance($config = [])
     {
         if(is_null(self::$instance)){
-            self::$config = $config;
+            self::$config = array_merge(self::$config,$config);
             self::$instance = new self();
         }
         return self::$instance;
@@ -36,7 +37,7 @@ class Dingtalk
         $accessToken = Cache::get('corp_access_token');
         if (!$accessToken)
         {
-            $response = Http::get('/gettoken', array('corpid' => self::$config['corpId'], 'corpsecret' => self::$config['corpSecret']));
+            $response = Http::get(self::$config['apiHost'].'/gettoken', array('corpid' => self::$config['corpId'], 'corpsecret' => self::$config['corpSecret']));
             $accessToken = $response->access_token;
             Cache::set('corp_access_token', $accessToken);
         }
@@ -79,7 +80,7 @@ class Dingtalk
     public static function getConfig()
     {
         $corpId = self::$config['corpId'];
-        $agentId = self::$config['agentId'],;
+        $agentId = self::$config['agentId'];
         $nonceStr = uniqid();
         $timeStamp = time();
         $url = self::curPageURL();
