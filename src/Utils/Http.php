@@ -25,6 +25,7 @@ class Http extends Request
 
     private static function joinParams($path, $params)
     {
+        $path = preg_match('/^http/',$path) ? $path : 'https://oapi.dingtalk.com'.$path;
         return $path . '?' . http_build_query($params);
     }
 

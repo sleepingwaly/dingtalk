@@ -3,10 +3,11 @@ namespace Dingtalk\Utils;
 
 class Cache
 {
-    public static function set($key, $value, $file=dirname(__FILE__).'/filecache.php')
+    public static function set($key, $value, $file)
     {
+        $file = $file?:dirname(__FILE__).'/filecache.php';
         if($key && $value){
-            $data = json_decode($this->get_file($file),true);
+            $data = json_decode(self::get_file($file),true);
             $item = array();
             $item["$key"] = $value;
 
@@ -18,14 +19,16 @@ class Cache
             }
             $item['create_time'] = time();
             $data["$key"] = $item;
-            $this->set_file($file,json_encode($data));
+            self::set_file($file,json_encode($data));
         }
+        return false;
     }
 
-    public static function get($key, $file=dirname(__FILE__).'/filecache.php')
+    public static function get($key, $file)
     {
+        $file = $file?:dirname(__FILE__).'/filecache.php';
         if($key){
-            $data = json_decode($this->get_file($file),true);
+            $data = json_decode(self::get_file($file),true);
             if($data && array_key_exists($key,$data)){
                 $item = $data["$key"];
                 if(!$item){
@@ -42,7 +45,7 @@ class Cache
         return false;
     }
 
-    private function get_file($filename)
+    private static function get_file($filename)
     {
         if (!file_exists($filename)) {
             $fp = fopen($filename, "w");
@@ -55,7 +58,7 @@ class Cache
         return $content;
     }
 
-    private function set_file($filename, $content)
+    private static function set_file($filename, $content)
     {
         $fp = fopen($filename, "w");
         fwrite($fp, "<?php exit();?>" . $content);
