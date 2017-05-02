@@ -15,14 +15,14 @@ class Smlogin{
 
     private function getAccessToken()
     {
-        $accessToken = Cache('DING_smlogin_access_token');
+        $accessToken = Cache::get('DING_smlogin_access_token');
         if (!$accessToken)
         {
             $appid = $this->appConfig['appid'];
             $appsecret = $this->appConfig['appsecret'];
             $response = Http::get('/sns/gettoken', array('appid' => $appid, 'appsecret' => $appsecret));
             $accessToken = $response->access_token;
-            Cache('DING_smlogin_access_token', $accessToken);
+            Cache::set('DING_smlogin_access_token', $accessToken);
         }
         return $accessToken;
     }
