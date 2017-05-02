@@ -6,11 +6,11 @@ use Dingtalk\Utils\Cache;
 
 class Smlogin{
 
-    private $appConfig = [];
+    private static $appConfig = [];
 
     public function __construct($config)
     {
-        $this->appConfig = $config;
+        self::$appConfig = $config;
     }
 
     private function getAccessToken()
@@ -18,8 +18,8 @@ class Smlogin{
         $accessToken = Cache::get('DING_smlogin_access_token');
         if (!$accessToken)
         {
-            $appid = $this->appConfig['appid'];
-            $appsecret = $this->appConfig['appsecret'];
+            $appid = self::$appConfig['appid'];
+            $appsecret = self::$appConfig['appsecret'];
             $response = Http::get('/sns/gettoken', array('appid' => $appid, 'appsecret' => $appsecret));
             $accessToken = $response->access_token;
             Cache::set('DING_smlogin_access_token', $accessToken);
