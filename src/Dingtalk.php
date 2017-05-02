@@ -10,6 +10,7 @@ class Dingtalk
     protected static $instance = null;
 
     protected static $config = [
+        'appid'=>'',
         'agentId'=>'',
         'corpId'=>'',
         'corpSecret'=>'',
@@ -59,7 +60,7 @@ class Dingtalk
         }
         return $jsticket;
     }
-    function curPageURL()
+    public function curPageURL()
     {
         $pageURL = 'http';
         if (array_key_exists('HTTPS',$_SERVER)&&$_SERVER["HTTPS"] == "on")
@@ -99,7 +100,8 @@ class Dingtalk
             'timeStamp' => $timeStamp,
             'corpId' => $corpId,
             'signature' => $signature);
-        return json_encode($config, JSON_UNESCAPED_SLASHES);
+        return $config;
+        // return json_encode($config, JSON_UNESCAPED_SLASHES);
     }
 
 
@@ -112,7 +114,7 @@ class Dingtalk
         return sha1($plain);
     }
 
-    static function check($res)
+    public static function check($res)
     {
         if ($res->errcode != 0)
         {

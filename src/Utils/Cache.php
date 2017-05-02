@@ -10,13 +10,7 @@ class Cache
             $data = json_decode(self::get_file($file),true);
             $item = array();
             $item["$key"] = $value;
-
-            $keyList = array('isv_corp_access_token','suite_access_token','js_ticket','corp_access_token');
-            if(in_array($key,$keyList)){
-                $item['expire_time'] = time() + 7000;
-            }else{
-                $item['expire_time'] = 0;
-            }
+            $item['expire_time'] = time() + 7000;
             $item['create_time'] = time();
             $data["$key"] = $item;
             self::set_file($file,json_encode($data));
